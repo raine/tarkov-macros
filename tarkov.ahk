@@ -17,7 +17,7 @@ Scale(xy) {
         if xy is integer
            return xy * (4/3)
         else
-           return [Floor(xy[0] * (4/3)), Floor(xy[1] * (4/3))]
+           return [Floor(xy[1] * (4/3)), Floor(xy[2] * (4/3))]
     else
         MsgBox Unsupported resolution
         ExitApp

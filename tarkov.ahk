@@ -149,10 +149,6 @@ Deal() {
 !^d::Deal()
 !^r::RefreshFleaMarket()
 
-!w::
-  MsgBox, %A_ScreenWidth%
-return
-
 #IfWinActive, ahk_exe Code.exe
 
 ~^s:: 

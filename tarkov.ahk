@@ -104,6 +104,8 @@ FilterByItem() {
 
 Sell() {
     global flea_market_add_offer_xy
+    FilterByItem()
+    Sleep 100
     MouseGetPos, start_x, start_y
     LeftClick(flea_market_add_offer_xy)
     Sleep 100
@@ -136,7 +138,7 @@ Deal() {
 #IfWinActive, EscapeFromTarkov
 
 ^c::GotoCharacter()
-^f::GotoFleaMarket()
+^v::GotoFleaMarket()
 ^1::GotoDealer("prapor")
 ^2::GotoDealer("therapist")
 ^3::GotoDealer("fence")
@@ -145,7 +147,7 @@ Deal() {
 ^w::GotoDealer("mechanic")
 ^e::GotoDealer("ragman")
 !^f::FilterByItem()
-^s::Sell()
+!^v::Sell()
 !^d::Deal()
 !^r::RefreshFleaMarket()
 

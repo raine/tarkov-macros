@@ -1,3 +1,3 @@
 # tarkov-macros
 
-AutoHotkey macros for reducing excessive clicking in menus of Escape from Tarkov.
+AutoHotkey macros to help with excessive clicking and mouse moving in menus of Escape from Tarkov.

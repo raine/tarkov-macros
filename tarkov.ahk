@@ -23,30 +23,34 @@ Scale(xy) {
         ExitApp
 }
 
-char_xy        := Scale([1000, 1060])
-dealers_xy     := Scale([1120, 1060])
-flea_market_xy := Scale([1220, 1060])
+global char_xy        := Scale([1000, 1060])
+global dealers_xy     := Scale([1120, 1060])
+global flea_market_xy := Scale([1220, 1060])
 
-dealer_nav_sell_xy := Scale([250, 45])
+global dealer_nav_sell_xy := Scale([250, 45])
 
-dealers_grid_xy := Scale([625, 330])
-dealers_grid_card_dimensions := Scale([160, 205])
-dealers_grid_gutter_size := Scale(10)
+global dealers_grid_xy := Scale([625, 330])
+global dealers_grid_card_dimensions := Scale([160, 205])
+global dealers_grid_gutter_size := Scale(10)
 
-deal_btn_xy := Scale([850, 165])
-flea_market_search_box_xy := Scale([270, 120])
-flea_market_add_offer_xy := Scale([1300, 80])
-flea_market_refresh_xy := Scale([1835, 115])
+global deal_btn_xy := Scale([850, 165])
+global flea_market_search_box_xy := Scale([270, 120])
+global flea_market_add_offer_xy := Scale([1300, 80])
+global flea_market_refresh_xy := Scale([1835, 115])
+global flea_market_gear_xy := Scale([480, 85])
+global flea_market_filters_remove_bartering_offers_xy := Scale([513, 278])
+global flea_market_filters_ok_xy := Scale([610, 430])
+global flea_market_filters_currency_xy := Scale([655, 120])
+global flea_market_filters_currency_rub_xy := Scale([655, 177])
 
-dealers := ["prapor", "therapist", "fence", "skier", "peacekeeper", "mechanic", "ragman", "jaeger"]
-dealers_per_row = 4
+global dealers := ["prapor", "therapist", "fence", "skier", "peacekeeper", "mechanic", "ragman", "jaeger"]
+global dealers_per_row = 4
 
 LeftClick(xy) {
     MouseClick, left, xy[1], xy[2], 1, 0
 }
 
 GetDealerCoords(index) {
-    global dealers, dealers_grid_xy, dealers_grid_card_dimensions, dealers_grid_gutter_size, dealers_per_row
     row_index := Mod(index, dealers_per_row)
     row := Floor(index / dealers_per_row)
     x := dealers_grid_xy[1] + (row_index * (dealers_grid_card_dimensions[1] + dealers_grid_gutter_size)) + 10
@@ -55,7 +59,6 @@ GetDealerCoords(index) {
 }
 
 GotoDealer(dealer_name) {
-    global dealers, dealers_xy, dealer_nav_sell_xy
     index := ObjIndexOf(dealers, dealer_name) - 1
     coords := GetDealerCoords(index)
     x := coords[1], y := coords[2]
@@ -63,7 +66,7 @@ GotoDealer(dealer_name) {
     LeftClick(dealers_xy)
     Sleep 100
     LeftClick([x, y])
-    Sleep 350
+    Sleep 500
     ; Loading Fence's view appears to take longer
     if (dealer_name == "fence") {
         Sleep 500
@@ -74,7 +77,6 @@ GotoDealer(dealer_name) {
 }
 
 GotoCharacter() {
-    global char_xy
     MouseGetPos, start_x, start_y
     LeftClick(char_xy)
     Sleep 30
@@ -82,7 +84,6 @@ GotoCharacter() {
 }
 
 GotoFleaMarket() {
-    global flea_market_xy, flea_market_search_box_xy
     MouseGetPos, start_x, start_y
     LeftClick(flea_market_xy)
     Sleep 100
@@ -103,7 +104,6 @@ FilterByItem() {
 }
 
 Sell() {
-    global flea_market_add_offer_xy
     FilterByItem()
     Sleep 100
     MouseGetPos, start_x, start_y
@@ -120,7 +120,6 @@ Sell() {
 }
 
 RefreshFleaMarket() {
-    global flea_market_refresh_xy
     MouseGetPos, start_x, start_y
     LeftClick(flea_market_refresh_xy)
     Sleep, 20
@@ -128,28 +127,48 @@ RefreshFleaMarket() {
 }
 
 Deal() {
-    global deal_btn_xy
     MouseGetPos, start_x, start_y
     LeftClick(deal_btn_xy)
     Sleep, 50
     MouseMove, %start_x%, %start_y%, 0
 }
 
+LeftClickAll(xys, delay) {
+    For index, xy in xys {
+        LeftClick(xy)
+        Sleep, 50
+    }
+}
+
+RemoveBarteringOffers() {
+    MouseGetPos, start_x, start_y
+    LeftClickAll([
+(Join,
+    flea_market_gear_xy,
+    flea_market_filters_remove_bartering_offers_xy,
+    flea_market_filters_currency_xy,
+    flea_market_filters_currency_rub_xy,
+    flea_market_filters_ok_xy
+)], 50)
+    MouseMove, %start_x%, %start_y%, 0
+}
+
 #IfWinActive, EscapeFromTarkov
 
-^c::GotoCharacter()
-^v::GotoFleaMarket()
-^1::GotoDealer("prapor")
-^2::GotoDealer("therapist")
-^3::GotoDealer("fence")
-^4::GotoDealer("skier")
-^q::GotoDealer("peacekeeper")
-^w::GotoDealer("mechanic")
-^e::GotoDealer("ragman")
+!^c::GotoCharacter()
+!^r::GotoFleaMarket()
+!^1::GotoDealer("prapor")
+!^2::GotoDealer("therapist")
+!^3::GotoDealer("fence")
+!^4::GotoDealer("skier")
+!^q::GotoDealer("peacekeeper")
+!^w::GotoDealer("mechanic")
+!^e::GotoDealer("ragman")
 !^f::FilterByItem()
 !^v::Sell()
 !^d::Deal()
-!^r::RefreshFleaMarket()
+!^b::RemoveBarteringOffers()
+;!^r::RefreshFleaMarket()
 
 #IfWinActive, ahk_exe Code.exe
 

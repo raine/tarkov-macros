@@ -174,6 +174,10 @@ RemoveBarteringOffers() {
 !^b::RemoveBarteringOffers()
 !^t::GotoFleaMarket()
 
+; For scrolling the stash faster
+!^WheelUp::Send, {WheelUp 5}
+!^WheelDown::Send, {WheelDown 5}
+
 #IfWinActive, ahk_exe Code.exe
 
 ~^s:: 

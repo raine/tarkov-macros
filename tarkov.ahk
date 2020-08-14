@@ -71,6 +71,9 @@ GotoDealer(dealer_name) {
     if (dealer_name == "fence") {
         Sleep 500
     }
+    if (dealer_name == "mechanic") {
+        Sleep 500
+    }
     LeftClick(dealer_nav_sell_xy)
     Sleep 200
     MouseMove, %start_x%, %start_y%, 0

@@ -172,6 +172,7 @@ RemoveBarteringOffers() {
 !^v::Sell()
 !^d::Deal()
 !^b::RemoveBarteringOffers()
+!^t::GotoFleaMarket()
 
 #IfWinActive, ahk_exe Code.exe
 

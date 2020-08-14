@@ -159,7 +159,7 @@ RemoveBarteringOffers() {
 #IfWinActive, EscapeFromTarkov
 
 !^c::GotoCharacter()
-!^r::GotoFleaMarket()
+
 !^1::GotoDealer("prapor")
 !^2::GotoDealer("therapist")
 !^3::GotoDealer("fence")
@@ -167,6 +167,7 @@ RemoveBarteringOffers() {
 !^q::GotoDealer("peacekeeper")
 !^w::GotoDealer("mechanic")
 !^e::GotoDealer("ragman")
+!^r::GotoDealer("jaeger")
 !^f::FilterByItem()
 !^v::Sell()
 !^d::Deal()

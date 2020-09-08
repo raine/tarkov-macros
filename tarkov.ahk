@@ -23,6 +23,8 @@ Scale(xy) {
         ExitApp
 }
 
+global sell_state := 0
+
 global char_xy        := Scale([1000, 1060])
 global dealers_xy     := Scale([1120, 1060])
 global flea_market_xy := Scale([1220, 1060])
@@ -42,6 +44,12 @@ global flea_market_filters_remove_bartering_offers_xy := Scale([513, 278])
 global flea_market_filters_ok_xy := Scale([610, 430])
 global flea_market_filters_currency_xy := Scale([655, 120])
 global flea_market_filters_currency_rub_xy := Scale([655, 177])
+global flea_market_sell_plus_requirements_xy := Scale([1460, 500])
+global flea_market_sell_plus_requirements_currency_xy := Scale([1000, 200])
+global flea_market_sell_plus_requirements_add_xy := Scale([960, 900])
+global flea_market_sell_place_order_xy := Scale([1280, 890])
+global flea_market_sell_auto_select_similar := Scale([885, 185])
+
 
 global dealers := ["prapor", "therapist", "fence", "skier", "peacekeeper", "mechanic", "ragman", "jaeger"]
 global dealers_per_row = 4
@@ -66,7 +74,7 @@ GotoDealer(dealer_name) {
     LeftClick(dealers_xy)
     Sleep 100
     LeftClick([x, y])
-    Sleep 500
+    Sleep 700
     ; Loading Fence's view appears to take longer
     if (dealer_name == "fence") {
         Sleep 500
@@ -108,18 +116,26 @@ FilterByItem() {
 
 Sell() {
     FilterByItem()
-    Sleep 100
-    MouseGetPos, start_x, start_y
+    Sleep 1200
     LeftClick(flea_market_add_offer_xy)
-    Sleep 100
-    MouseMove, 1200, 155, 0
-    Sleep 150
-    Click, Down
-    Sleep, 50
-    MouseMove, -300, 0, 0, R
-    Sleep, 50
-    Click, Up
-    MouseMove, %start_x%, %start_y%, 0
+    Sleep 200
+    LeftClick(flea_market_sell_auto_select_similar)
+    sell_state := 1
+}
+
+Sell2() {
+    if (sell_state = 1) {
+        LeftClick(flea_market_sell_plus_requirements_xy)
+        Sleep 300
+        LeftClick(flea_market_sell_plus_requirements_currency_xy)
+        sell_state = 2
+    } else if (sell_state = 2) {
+        LeftClick(flea_market_sell_plus_requirements_add_xy)
+        Sleep 300
+        LeftClick(flea_market_sell_place_order_xy)
+        Sleep 300
+        GotoCharacter()
+    }
 }
 
 RefreshFleaMarket() {
@@ -170,13 +186,14 @@ RemoveBarteringOffers() {
 !^r::GotoDealer("jaeger")
 !^f::FilterByItem()
 !^v::Sell()
+!^g::Sell2()
 !^d::Deal()
 !^b::RemoveBarteringOffers()
 !^t::GotoFleaMarket()
 
 ; For scrolling the stash faster
-!^WheelUp::Send, {WheelUp 5}
-!^WheelDown::Send, {WheelDown 5}
++WheelUp::Send, {WheelUp 4}
++WheelDown::Send, {WheelDown 4}
 
 #IfWinActive, ahk_exe Code.exe
 
